@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.startBtn.setOnClickListener {
-            //startActivity(Intent(this, SelectBrandActivity::class.java))
+            startActivity(Intent(this, SelectBrandActivity::class.java))
         }
 
         binding.endBtn.setOnClickListener {

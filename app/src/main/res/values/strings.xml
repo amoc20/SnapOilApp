@@ -4,4 +4,14 @@
     <string name="start_btn_text">Start</string>
     <string name="end_btn_text">Konec</string>
     <string name="gas_station">Logo čerpací stanice</string>
+    <string name="select_brand_title">Vyberte značku</string>
+    <string name="back_btn_text">Zpět</string>
+    <string name="select_station_title">Vyberte stanici</string>
+    <string name="upload_photo_title">Nahrajte fotku</string>
+    <string name="upload_btn_text">Vybrat foto</string>
+    <string name="confirm_btn_text">Odeslat</string>
+    <string name="upload_image">Foto stojanu čerpací stanice</string>
+    <string name="natural_95">Natural 95</string>
+    <string name="example_price">0,00</string>
+    <string name="diesel">Diesel</string>
 </resources>
