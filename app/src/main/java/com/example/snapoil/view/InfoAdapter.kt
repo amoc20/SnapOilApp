@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.snapoil.R
 
-class InfoAdapter(val infoList: List<Any>) : RecyclerView.Adapter<InfoAdapter.InfoHolder>() {
-    private var selectedPosition: Int = -1
+class InfoAdapter(private val infoList: List<Any>) : RecyclerView.Adapter<InfoAdapter.InfoHolder>() {
+    private var onInfoClickListener: OnInfoClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoHolder {
         return InfoHolder(
@@ -17,19 +17,26 @@ class InfoAdapter(val infoList: List<Any>) : RecyclerView.Adapter<InfoAdapter.In
     }
 
     override fun onBindViewHolder(holder: InfoHolder, position: Int) {
-        holder.setInfoData(infoList[position])
-        holder.itemView.setSelected(selectedPosition == position)
+        val info = infoList[position]
+        holder.setInfoData(info)
+
+        holder.itemView.setOnClickListener {
+            if (onInfoClickListener != null) {
+                onInfoClickListener!!.onInfoClick(position, info)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return infoList.size
     }
 
-    fun getSelected(): Any? {
-        if (selectedPosition >= 0) {
-            return infoList[selectedPosition]
-        }
-        return null
+    fun setOnInfoClickListener(onInfoClickListener: OnInfoClickListener) {
+        this.onInfoClickListener = onInfoClickListener
+    }
+
+    interface OnInfoClickListener {
+        fun onInfoClick(position: Int, info: Any)
     }
 
     // Holder class
@@ -42,13 +49,6 @@ class InfoAdapter(val infoList: List<Any>) : RecyclerView.Adapter<InfoAdapter.In
 
         fun setInfoData(info: Any) {
             textInfo?.text = info.toString()
-            textInfo?.setOnClickListener {
-                if (selectedPosition != adapterPosition) {
-                    notifyItemChanged(selectedPosition)
-                    selectedPosition = adapterPosition
-                }
-            }
         }
-
     }
 }
