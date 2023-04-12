@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape android:src="@drawable/rounded_rectangle"/>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="50dp"/>
+            <gradient android:angle="90" android:startColor="@color/red_700" android:centerColor="@color/red_500" android:endColor="@color/red_200"/>
+        </shape>
+    </item>
+</layer-list>

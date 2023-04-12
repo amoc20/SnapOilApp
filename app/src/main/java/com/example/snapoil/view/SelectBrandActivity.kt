@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.example.snapoil.databinding.ActivitySelectBrandBinding
 import com.example.snapoil.model.Brand
@@ -14,7 +14,8 @@ import com.google.gson.Gson
 
 class SelectBrandActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectBrandBinding
-    private var brandList: List<Brand> = listOf()
+    private lateinit var infoAdapter: InfoAdapter
+    private val url = "http://localhost:5053/brands"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +23,8 @@ class SelectBrandActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadBrands()
-        //brandList = listOf(Brand(1, "Ojl a.s."))
 
-        val infoAdapter = InfoAdapter(brandList)
+        infoAdapter = InfoAdapter(listOf())
 
         binding.brandRecycler.layoutManager = LinearLayoutManager(this)
         binding.brandRecycler.adapter = infoAdapter
@@ -44,19 +44,19 @@ class SelectBrandActivity : AppCompatActivity() {
     }
 
     private fun loadBrands() {
-        val queue = Volley.newRequestQueue(this)
-        val url = "http://192.168.0.113:5053/brands"
-
-        val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+        val request = JsonArrayRequest(
+            Request.Method.GET, url, null,
             { response ->
-                brandList = Gson().fromJson(response.toString(), Array<Brand>::class.java).toList()
+                val brandList = Gson().fromJson(response.toString(), Array<Brand>::class.java).toList()
+                infoAdapter.setList(brandList)
+                infoAdapter.notifyDataSetChanged()
             },
             { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
             }
         )
 
-        queue.add(jsonObjectRequest)
+        Volley.newRequestQueue(this).add(request)
     }
 
     companion object {

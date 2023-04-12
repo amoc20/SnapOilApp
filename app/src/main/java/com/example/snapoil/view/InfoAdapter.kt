@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.snapoil.R
 
-class InfoAdapter(private val infoList: List<Any>) : RecyclerView.Adapter<InfoAdapter.InfoHolder>() {
+class InfoAdapter(private var infoList: List<Any>) : RecyclerView.Adapter<InfoAdapter.InfoHolder>() {
     private var onInfoClickListener: OnInfoClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoHolder {
@@ -29,6 +29,10 @@ class InfoAdapter(private val infoList: List<Any>) : RecyclerView.Adapter<InfoAd
 
     override fun getItemCount(): Int {
         return infoList.size
+    }
+
+    fun setList(newList: List<Any>) {
+        infoList = newList
     }
 
     fun setOnInfoClickListener(onInfoClickListener: OnInfoClickListener) {

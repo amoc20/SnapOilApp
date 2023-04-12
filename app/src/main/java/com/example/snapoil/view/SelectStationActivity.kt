@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.example.snapoil.databinding.ActivitySelectStationBinding
 import com.example.snapoil.model.Brand
@@ -15,8 +15,10 @@ import com.google.gson.Gson
 
 class SelectStationActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectStationBinding
-    private var stationList: List<GasStation> = listOf()
+    private lateinit var infoAdapter: InfoAdapter
     private lateinit var selectedBrand: Brand
+    private var stationList: List<GasStation> = listOf()
+    private val url = "http://localhost:5053/stations/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +31,8 @@ class SelectStationActivity : AppCompatActivity() {
         )
 
         loadStations()
-        //stationList = listOf(GasStation(1, "Kolín", "Ovčárecká", selectedBrand))
 
-        val infoAdapter = InfoAdapter(stationList)
+        infoAdapter = InfoAdapter(stationList)
 
         binding.stationRecycler.layoutManager = LinearLayoutManager(this)
         binding.stationRecycler.adapter = infoAdapter
@@ -51,20 +52,19 @@ class SelectStationActivity : AppCompatActivity() {
     }
 
     private fun loadStations() {
-        val queue = Volley.newRequestQueue(this)
-        val url = "http://192.168.0.113:5053/stations/${selectedBrand.id}"
-
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null,
+        val request = JsonArrayRequest(
+            Request.Method.GET, url + selectedBrand.id, null,
             { response ->
                 stationList = Gson().fromJson(response.toString(), Array<GasStation>::class.java).toList()
+                infoAdapter.setList(stationList)
+                infoAdapter.notifyDataSetChanged()
             },
             { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
             }
         )
 
-        queue.add(jsonObjectRequest)
+        Volley.newRequestQueue(this).add(request)
     }
 
     companion object {
