@@ -3,19 +3,21 @@ package com.example.snapoil.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.example.snapoil.databinding.ActivitySelectBrandBinding
 import com.example.snapoil.model.Brand
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class SelectBrandActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectBrandBinding
     private lateinit var infoAdapter: InfoAdapter
     private val url = "http://localhost:5053/brands"
+
+    private val serverErrorMsg = "Server je nedostupný"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +54,10 @@ class SelectBrandActivity : AppCompatActivity() {
                 infoAdapter.notifyDataSetChanged()
             },
             { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.mainLayout, serverErrorMsg, Snackbar.LENGTH_LONG)
+                    .setAction("ZKUSIT ZNOVU") {
+                        loadBrands()
+                    }.show()
             }
         )
 

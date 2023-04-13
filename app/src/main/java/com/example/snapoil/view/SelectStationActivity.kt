@@ -3,7 +3,6 @@ package com.example.snapoil.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
@@ -11,6 +10,7 @@ import com.android.volley.toolbox.Volley
 import com.example.snapoil.databinding.ActivitySelectStationBinding
 import com.example.snapoil.model.Brand
 import com.example.snapoil.model.GasStation
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class SelectStationActivity : AppCompatActivity() {
@@ -19,6 +19,8 @@ class SelectStationActivity : AppCompatActivity() {
     private lateinit var selectedBrand: Brand
     private var stationList: List<GasStation> = listOf()
     private val url = "http://localhost:5053/stations/"
+
+    private val serverErrorMsg = "Server je nedostupný"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,10 @@ class SelectStationActivity : AppCompatActivity() {
                 infoAdapter.notifyDataSetChanged()
             },
             { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.mainLayout, serverErrorMsg, Snackbar.LENGTH_LONG)
+                    .setAction("ZKUSIT ZNOVU") {
+                        loadStations()
+                    }.show()
             }
         )
 

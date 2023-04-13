@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +20,7 @@ import com.example.snapoil.api.VolleyFileUploadRequest
 import com.example.snapoil.databinding.ActivityUploadPhotoBinding
 import com.example.snapoil.model.GasStation
 import com.example.snapoil.model.GasStationPrices
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import org.json.JSONObject
 import java.nio.charset.Charset
@@ -33,8 +33,13 @@ class UploadPhotoActivity : AppCompatActivity() {
 
     private val uploadImageUrl = "http://localhost:5053/uploadimage"
     private val uploadPricesUrl = "http://localhost:5053/uploadprices"
+
     private val serverErrorMsg = "Server je nedostupný"
-    private val blankErrorMsg = "Vyplňte hodnoty"
+    private val blankValuesErrorMsg = "Vyplňte hodnoty"
+    private val pricesSuccessMsg = "Ceny byly odeslány"
+    private val pricesErrorMsg = "Ceny se nepodařilo odeslat"
+    private val tryAgainMsg = "ZKUSIT ZNOVU"
+    private val backToMenuMsg = "ZPĚT DO MENU"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +101,10 @@ class UploadPhotoActivity : AppCompatActivity() {
             },
             Response.ErrorListener
             { error ->
-                Toast.makeText(this, serverErrorMsg, Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.mainLayout, serverErrorMsg, Snackbar.LENGTH_LONG)
+                    .setAction(tryAgainMsg) {
+                        postImage()
+                    }.show()
             }
         ) {
             override fun getByteData(): MutableMap<String, FileDataPart> {
@@ -121,7 +129,7 @@ class UploadPhotoActivity : AppCompatActivity() {
         val dieselText = binding.dieselEditText.text
 
         if (natural95Text.isNullOrBlank() || dieselText.isNullOrBlank()) {
-            Toast.makeText(this, blankErrorMsg, Toast.LENGTH_LONG).show()
+            Snackbar.make(binding.mainLayout, blankValuesErrorMsg, Snackbar.LENGTH_LONG).show()
             binding.confirmBtn.isEnabled = true
             binding.loadingPanel.visibility = View.INVISIBLE
             return
@@ -139,15 +147,19 @@ class UploadPhotoActivity : AppCompatActivity() {
                 val result = Gson().fromJson(response.toString(), GasStationPrices::class.java)
                 binding.loadingPanel.visibility = View.INVISIBLE
                 if (result == prices) {
-                    // TODO show success
+                    Snackbar.make(binding.mainLayout, pricesSuccessMsg, Snackbar.LENGTH_LONG)
+                        .setAction(backToMenuMsg) {
+                            startActivity(Intent(this, MainActivity::class.java))
+                        }.show()
                 } else {
-                    //TODO show error
+                    Snackbar.make(binding.mainLayout, pricesErrorMsg,
+                        Snackbar.LENGTH_LONG).show()
                 }
             },
             { error ->
                 binding.confirmBtn.isEnabled = true
                 binding.loadingPanel.visibility = View.INVISIBLE
-                Toast.makeText(this, serverErrorMsg, Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.mainLayout, serverErrorMsg, Snackbar.LENGTH_LONG).show()
             }
         )
 

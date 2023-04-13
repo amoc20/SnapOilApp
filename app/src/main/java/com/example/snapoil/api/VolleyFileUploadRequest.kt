@@ -6,7 +6,7 @@ import java.io.*
 import kotlin.math.min
 
 /*
-Solution from https://betterprogramming.pub/how-to-upload-an-image-file-to-your-server-using-volley-in-kotlin-a-step-by-step-tutorial-23f3c0603ec2
+Solution imported from https://betterprogramming.pub/how-to-upload-an-image-file-to-your-server-using-volley-in-kotlin-a-step-by-step-tutorial-23f3c0603ec2
 */
 open class VolleyFileUploadRequest(
     method: Int,

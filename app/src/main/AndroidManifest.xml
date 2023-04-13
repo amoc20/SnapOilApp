@@ -13,12 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/gas_station"
         android:supportsRtl="true"
-        android:screenOrientation="portrait"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.SnapOil"
         tools:targetApi="31">
         <activity
             android:name=".view.UploadPhotoActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".view.SelectStationActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -33,6 +34,7 @@
         </activity>
         <activity
             android:name=".view.SelectBrandActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -40,6 +42,7 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
