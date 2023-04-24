@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -36,10 +37,8 @@ class UploadPhotoActivity : AppCompatActivity() {
 
     private val serverErrorMsg = "Server je nedostupný"
     private val blankValuesErrorMsg = "Vyplňte hodnoty"
-    private val pricesSuccessMsg = "Ceny byly odeslány"
     private val pricesErrorMsg = "Ceny se nepodařilo odeslat"
     private val tryAgainMsg = "ZKUSIT ZNOVU"
-    private val backToMenuMsg = "ZPĚT DO MENU"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +68,7 @@ class UploadPhotoActivity : AppCompatActivity() {
         }
     }
 
+    // Open gallery and pick image
     private val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
@@ -80,6 +80,7 @@ class UploadPhotoActivity : AppCompatActivity() {
         }
     }
 
+    // Conversion of image URI to ByteArray
     private fun createImageData(uri: Uri) {
         val inputStream = contentResolver.openInputStream(uri)
         inputStream?.buffered()?.use {
@@ -147,10 +148,15 @@ class UploadPhotoActivity : AppCompatActivity() {
                 val result = Gson().fromJson(response.toString(), GasStationPrices::class.java)
                 binding.loadingPanel.visibility = View.INVISIBLE
                 if (result == prices) {
-                    Snackbar.make(binding.mainLayout, pricesSuccessMsg, Snackbar.LENGTH_LONG)
-                        .setAction(backToMenuMsg) {
-                            startActivity(Intent(this, MainActivity::class.java))
-                        }.show()
+                    binding.successPanel.visibility = View.VISIBLE
+
+                    object : CountDownTimer(3000, 3000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                        }
+                        override fun onFinish() {
+                            startActivity(Intent(this@UploadPhotoActivity, MainActivity::class.java))
+                        }
+                    }.start()
                 } else {
                     Snackbar.make(binding.mainLayout, pricesErrorMsg,
                         Snackbar.LENGTH_LONG).show()

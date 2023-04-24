@@ -34,7 +34,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleUploadPhoto"
-        app:srcCompat="@drawable/upload" />
+        app:srcCompat="@drawable/upload"
+        tools:ignore="ImageContrastCheck" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -163,6 +164,28 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:indeterminate="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/successPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#663C3C3C"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:contentDescription="@string/success_prompt"
+            app:srcCompat="@drawable/success"
+            tools:ignore="ImageContrastCheck" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
